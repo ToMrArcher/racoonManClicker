@@ -1,0 +1,16 @@
+body {
+   text-align: center;
+}
+
+.mainBody {
+   margin: auto;
+   padding: 4px;
+   width: 300px;
+   border: 1px black solid;
+   border-radius: 1.5%;
+}
+
+#topText {
+   font-size: larger;
+   margin: 6px;
+}
