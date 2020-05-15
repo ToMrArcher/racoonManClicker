@@ -4,6 +4,8 @@ var genesMessages = [
 
 var nextThreshold = [1, 0];
 var genes = 0;
+var clickingMultiplyer = 1;
+var mutationMultiplyer = 1;
 
 function addGenes(number) {
    genes += number;
@@ -24,7 +26,7 @@ function addGenes(number) {
 var clickPower = 1;
 
 document.getElementById("clickButton").addEventListener("click", function () {
-   addGenes(clickPower);
+   addGenes(clickPower * clickingMultiplyer);
 });
 
 function buyTrainingLevel() {
@@ -57,6 +59,19 @@ function buyMutation() {
 }
 //#endregion
 
+var buyUpgrade = {
+   clickingUpgrade: function (amountToMultiply) {
+      clickingMultiplyer += amountToMultiply;
+   },
+   mutationUpgrade: function (amountToMultiply) {
+      mutationMultiplyer += amountToMultiply;
+   },
+};
+
+document.getElementById("clickingUpgrade1").addEventListener("click", () => {
+   buyUpgrade.clickingUpgrade(1);
+});
+
 window.setInterval(function () {
-   addGenes(mutations / 100);
+   addGenes((mutations / 100) * mutationMultiplyer);
 }, 10);
