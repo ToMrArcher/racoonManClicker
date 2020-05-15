@@ -69,7 +69,12 @@ var buyUpgrade = {
 };
 
 document.getElementById("clickingUpgrade1").addEventListener("click", () => {
-   buyUpgrade.clickingUpgrade(1);
+   var cost = 200;
+   if (genes >= cost) {
+      buyUpgrade.clickingUpgrade(1);
+      document.getElementById("genes").innerHTML = genes;
+      document.getElementById("clickingUpgrade1").remove();
+   }
 });
 
 window.setInterval(function () {

@@ -14,3 +14,8 @@ body {
    font-size: larger;
    margin: 6px;
 }
+
+#clickButton {
+   width: 90px;
+   height: 90px;
+}
