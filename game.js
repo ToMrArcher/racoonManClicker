@@ -6,11 +6,11 @@ var genesMessages = [
 var income = {
    clickingPower: {
       base: 1,
-      multiplier: 0,
+      multiplier: 1,
    },
    mutations: {
       base: 0,
-      multiplier: 0,
+      multiplier: 1,
    },
    total: {
       base: 0,
@@ -19,10 +19,63 @@ var income = {
    },
 };
 
+var upgrades = {
+   click: {
+      currentUpgrade: 0,
+      upgrades: [
+         {
+            cost: 200,
+            upgradeAmount: 1,
+            html: "Longer fingernails (+1 to clicking multiplier) Cost: 200",
+         },
+         {
+            cost: 2000,
+            upgradeAmount: 2,
+            html: `Even longer fingernails (+2 to clicking multiplier) Cost: 2000`,
+         },
+      ],
+   },
+   mutations: {
+      currentUpgrade: 0,
+      upgrades: [
+         {
+            cost: 200,
+            upgradeAmount: 1,
+         },
+         {
+            cost: 2000,
+            upgradeAmount: 2,
+         },
+      ],
+   },
+   buyUpgrade: {
+      clickingUpgrade: function (amountToMultiply) {
+         income.clickingPower.multiplier += amountToMultiply;
+      },
+      mutationUpgrade: function (amountToMultiply) {
+         income.mutations.multiplier += amountToMultiply;
+      },
+   },
+};
+
 var nextMessageThreshold = [1, 0];
 var genes = 0;
-var clickingMultiplyer = 1;
-var mutationMultiplyer = 1;
+
+window.onload = () => {
+   for (let i = 0; i < upgrades.click.upgrades.length; i++) {
+      let button = document.createElement("button");
+      button.innerHTML = upgrades.click.upgrades[i].html;
+      button.addEventListener("click", function () {
+         console.log(upgrades.click.upgrades[i].upgradeAmount);
+         upgrades.buyUpgrade.clickingUpgrade(
+            upgrades.click.upgrades[i].upgradeAmount
+         );
+         button.remove();
+      });
+      console.log(button);
+      document.getElementById("mainBody").appendChild(button);
+   }
+};
 
 function addGenes(number) {
    genes += number;
@@ -81,25 +134,6 @@ function buyMutation() {
    document.getElementById("mutationCost").innerHTML = nextCost; //updates the cursor cost for the user
 }
 //#endregion
-
-var buyUpgrade = {
-   clickingUpgrade: function (amountToMultiply) {
-      income.clickingPower.multiplier += amountToMultiply;
-   },
-   mutationUpgrade: function (amountToMultiply) {
-      income.mutations.multiplier += amountToMultiply;
-   },
-};
-
-document.getElementById("clickingUpgrade1").addEventListener("click", () => {
-   var cost = 200;
-   if (genes >= cost) {
-      buyUpgrade.clickingUpgrade(1);
-      document.getElementById("genes").innerHTML = genes;
-      document.getElementById("clickingUpgrade1").remove();
-      document.createElement("button");
-   }
-});
 
 window.setInterval(function () {
    income.total.absoluteTotal =

@@ -2,7 +2,7 @@ body {
    text-align: center;
 }
 
-.mainBody {
+#mainBody {
    margin: auto;
    padding: 4px;
    width: 300px;
