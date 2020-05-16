@@ -1,8 +1,25 @@
 var genesMessages = [
    "Ouch, a racoon bit me in this higly dangerous radioactive facility that conducts experiments on racoons my class is taking a field trip to, better not tell any adults about it!",
+   "I can eat trash!!! Damn thats awesome!",
 ];
 
-var nextThreshold = [1, 0];
+var income = {
+   clickingPower: {
+      base: 1,
+      multiplier: 0,
+   },
+   mutations: {
+      base: 0,
+      multiplier: 0,
+   },
+   total: {
+      base: 0,
+      multiplier: 0,
+      absoluteTotal: 0,
+   },
+};
+
+var nextMessageThreshold = [1, 0];
 var genes = 0;
 var clickingMultiplyer = 1;
 var mutationMultiplyer = 1;
@@ -10,61 +27,67 @@ var mutationMultiplyer = 1;
 function addGenes(number) {
    genes += number;
    document.getElementById("genes").innerHTML = Math.floor(genes);
+
    //Threshhold for next message logic.
-   if (genes >= nextThreshold[0]) {
+   if (genes >= nextMessageThreshold[0]) {
       document.getElementById("topText").innerHTML =
-         genesMessages[nextThreshold[1]];
-      if (!(nextThreshold[1] + 1 >= genesMessages.length)) {
-         nextThreshold[1] += 1;
+         genesMessages[nextMessageThreshold[1]];
+      if (!(nextMessageThreshold[1] + 1 >= genesMessages.length)) {
+         nextMessageThreshold[0] *= 1000;
+         nextMessageThreshold[1] += 1;
       } else {
-         nextThreshold = Infinity;
+         nextMessageThreshold = Infinity;
       }
    }
 }
 
 //#region CLICKING - Clicking button and clicking level
-var clickPower = 1;
 
 document.getElementById("clickButton").addEventListener("click", function () {
-   addGenes(clickPower * clickingMultiplyer);
+   addGenes(
+      income.clickingPower.base *
+         (income.clickingPower.multiplier != 0
+            ? income.clickingPower.multiplier
+            : 1)
+   );
 });
 
 function buyTrainingLevel() {
-   var trainingCost = Math.floor(50 * Math.pow(1.1, clickPower));
+   var trainingCost = Math.floor(50 * Math.pow(1.1, income.clickingPower.base));
    if (genes >= trainingCost) {
-      clickPower += 1;
+      income.clickingPower.base += 1;
       genes -= trainingCost;
-      document.getElementById("trainingPower").innerHTML = clickPower;
+      document.getElementById("trainingPower").innerHTML =
+         income.clickingPower.base;
       document.getElementById("genes").innerHTML = genes;
    }
-   var nextCost = Math.floor(50 * Math.pow(1.1, clickPower));
+   var nextCost = Math.floor(50 * Math.pow(1.1, income.clickingPower.base));
    document.getElementById("trainingCost").innerHTML = nextCost;
 }
 //#endregion
 
 //#region MUTATIONS - 1st level autoclick
-var mutations = 0;
 
 function buyMutation() {
-   var mutationCost = Math.floor(10 * Math.pow(1.1, mutations)); //works out the cost of this cursor
+   var mutationCost = Math.floor(10 * Math.pow(1.1, income.mutations.base)); //works out the cost of this cursor
    if (genes >= mutationCost) {
       //checks that the player can afford the cursor
-      mutations += 1; //increases number of cursors
+      income.mutations.base += 1; //increases number of cursors
       genes -= mutationCost; //removes the cookies spent
-      document.getElementById("mutations").innerHTML = mutations; //updates the number of cursors for the user
+      document.getElementById("mutations").innerHTML = income.mutations.base; //updates the number of cursors for the user
       document.getElementById("genes").innerHTML = genes; //updates the number of cookies for the user
    }
-   var nextCost = Math.floor(10 * Math.pow(1.1, mutations)); //works out the cost of the next cursor
+   var nextCost = Math.floor(10 * Math.pow(1.1, income.mutations.base)); //works out the cost of the next cursor
    document.getElementById("mutationCost").innerHTML = nextCost; //updates the cursor cost for the user
 }
 //#endregion
 
 var buyUpgrade = {
    clickingUpgrade: function (amountToMultiply) {
-      clickingMultiplyer += amountToMultiply;
+      income.clickingPower.multiplier += amountToMultiply;
    },
    mutationUpgrade: function (amountToMultiply) {
-      mutationMultiplyer += amountToMultiply;
+      income.mutations.multiplier += amountToMultiply;
    },
 };
 
@@ -74,9 +97,13 @@ document.getElementById("clickingUpgrade1").addEventListener("click", () => {
       buyUpgrade.clickingUpgrade(1);
       document.getElementById("genes").innerHTML = genes;
       document.getElementById("clickingUpgrade1").remove();
+      document.createElement("button");
    }
 });
 
 window.setInterval(function () {
-   addGenes((mutations / 100) * mutationMultiplyer);
+   income.total.absoluteTotal =
+      income.mutations.base *
+      (income.mutations.multiplier != 0 ? income.mutations.multiplier : 1);
+   addGenes(income.total.absoluteTotal / 100);
 }, 10);
