@@ -1,8 +1,10 @@
+// The messages to be displayed on the top of the screen.
 var genesMessages = [
    "Ouch, a racoon bit me in this higly dangerous radioactive facility that conducts experiments on racoons my class is taking a field trip to, better not tell any adults about it!",
    "I can eat trash!!! Damn thats awesome!",
 ];
 
+// The object keeping track of all our incomes.
 var income = {
    clickingPower: {
       base: 1,
@@ -19,6 +21,7 @@ var income = {
    },
 };
 
+//The object keeping track of all our upgrades, as well as purchasing them.
 var upgrades = {
    click: {
       currentUpgrade: 0,
@@ -72,9 +75,12 @@ var upgrades = {
    },
 };
 
+//The next threashhold to be met and the next index. It starts at 1 cookie, and 0th index  of the genesMessages
 var nextMessageThreshold = [1, 0];
+//Total genes
 var genes = 0;
 
+// Onload, create all the upgrade buttons
 window.onload = () => {
    for (let i = 0; i < upgrades.click.upgrades.length; i++) {
       let button = document.createElement("button");
@@ -109,6 +115,8 @@ window.onload = () => {
    }
 };
 
+// The general function to add genes. Is used by click and auto income.
+//Adter income is added, it checks for the next threshhold to see if it should display a new message
 function addGenes(number) {
    genes += number;
    document.getElementById("genes").innerHTML = Math.floor(genes);
@@ -128,6 +136,7 @@ function addGenes(number) {
 
 //#region CLICKING - Clicking button and clicking level
 
+// The main clicking button logic.
 document.getElementById("clickButton").addEventListener("click", function () {
    addGenes(
       income.clickingPower.base *
@@ -137,6 +146,7 @@ document.getElementById("clickButton").addEventListener("click", function () {
    );
 });
 
+// Buys a training level, increasing genes per click by 1.
 function buyTrainingLevel() {
    var trainingCost = Math.floor(50 * Math.pow(1.1, income.clickingPower.base));
    if (genes >= trainingCost) {
@@ -153,6 +163,7 @@ function buyTrainingLevel() {
 
 //#region MUTATIONS - 1st level autoclick
 
+//Buys an extra mutation
 function buyMutation() {
    var mutationCost = Math.floor(10 * Math.pow(1.1, income.mutations.base)); //works out the cost of this cursor
    if (genes >= mutationCost) {
@@ -167,6 +178,7 @@ function buyMutation() {
 }
 //#endregion
 
+// Code to run every tenth of a second. Adds the income total to genes total.
 window.setInterval(function () {
    income.total.absoluteTotal =
       income.mutations.base *
