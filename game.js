@@ -41,19 +41,33 @@ var upgrades = {
          {
             cost: 200,
             upgradeAmount: 1,
+            html:
+               "Faster rate of mutation generation (+1 to mutation multiplier) Cost: 200",
          },
          {
             cost: 2000,
             upgradeAmount: 2,
+            html:
+               "Even faster rate of mutation generation (+2 to mutation multiplier) Cost: 2000",
          },
       ],
    },
    buyUpgrade: {
-      clickingUpgrade: function (amountToMultiply) {
-         income.clickingPower.multiplier += amountToMultiply;
+      clickingUpgrade: function (amountToMultiply, cost) {
+         if (genes >= cost) {
+            income.clickingPower.multiplier += amountToMultiply;
+            genes -= cost;
+            return true;
+         }
+         return false;
       },
-      mutationUpgrade: function (amountToMultiply) {
-         income.mutations.multiplier += amountToMultiply;
+      mutationUpgrade: function (amountToMultiply, cost) {
+         if (genes >= cost) {
+            income.mutations.multiplier += amountToMultiply;
+            genes -= cost;
+            return true;
+         }
+         return false;
       },
    },
 };
@@ -66,13 +80,31 @@ window.onload = () => {
       let button = document.createElement("button");
       button.innerHTML = upgrades.click.upgrades[i].html;
       button.addEventListener("click", function () {
-         console.log(upgrades.click.upgrades[i].upgradeAmount);
-         upgrades.buyUpgrade.clickingUpgrade(
-            upgrades.click.upgrades[i].upgradeAmount
-         );
-         button.remove();
+         if (
+            upgrades.buyUpgrade.clickingUpgrade(
+               upgrades.click.upgrades[i].upgradeAmount,
+               upgrades.click.upgrades[i].cost
+            )
+         ) {
+            button.remove();
+         }
       });
-      console.log(button);
+      document.getElementById("mainBody").appendChild(button);
+   }
+
+   for (let i = 0; i < upgrades.mutations.upgrades.length; i++) {
+      let button = document.createElement("button");
+      button.innerHTML = upgrades.mutations.upgrades[i].html;
+      button.addEventListener("click", function () {
+         if (
+            upgrades.buyUpgrade.mutationUpgrade(
+               upgrades.mutations.upgrades[i].upgradeAmount,
+               upgrades.mutations.upgrades[i].cost
+            )
+         ) {
+            button.remove();
+         }
+      });
       document.getElementById("mainBody").appendChild(button);
    }
 };
