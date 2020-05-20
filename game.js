@@ -2,6 +2,7 @@
 var genesMessages = [
    "Ouch, a racoon bit me in this higly dangerous radioactive facility that conducts experiments on racoons my class is taking a field trip to, better not tell any adults about it!",
    "I can eat trash!!! Damn thats awesome!",
+   "If I exrtend my claws, I can climb walls. I wonder how the beautiful lady from school will see me now, as I am a super racoon. She better love me. Or else. ",
 ];
 
 // The object keeping track of all our incomes.
@@ -36,6 +37,11 @@ var upgrades = {
             upgradeAmount: 2,
             html: `Even longer fingernails (+2 to clicking multiplier) Cost: 2000`,
          },
+         {
+            cost: 10000,
+            upgradeAmount: 4,
+            html: `Even longer fingernails (+4 to clicking multiplier) Cost: 10000`,
+         },
       ],
    },
    mutations: {
@@ -52,6 +58,11 @@ var upgrades = {
             upgradeAmount: 2,
             html:
                "Even faster rate of mutation generation (+2 to mutation multiplier) Cost: 2000",
+         },
+         {
+            cost: 10000,
+            upgradeAmount: 1000,
+            html: `Even longer fingernails (+1000 to mutation multiplier) Cost: 10000`,
          },
       ],
    },
